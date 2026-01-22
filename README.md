@@ -168,6 +168,41 @@ med_eun2b/
 관리자 페이지는 `http://localhost:8000/admin/`에서 접속할 수 있습니다.
 생성한 관리자 계정으로 로그인하여 의약품 정보와 게시글을 관리할 수 있습니다.
 
+## 보안 고려사항
+
+개발 환경과 프로덕션 환경에서 다음 사항을 고려하세요:
+
+### 개발 환경
+- DEBUG=True로 설정
+- SQLite 사용 가능 (USE_SQLITE=True)
+- ALLOWED_HOSTS는 빈 리스트 가능
+
+### 프로덕션 환경
+프로덕션 배포 시 다음 설정을 변경해야 합니다:
+
+```python
+# settings.py에 추가
+DEBUG = False
+ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com']
+
+# HTTPS 설정 (선택사항, 권장)
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+```
+
+### 보안 기능
+이 프로젝트는 다음 보안 기능을 포함합니다:
+- CSRF 보호 활성화
+- XSS 방지 (Django 템플릿 자동 이스케이핑)
+- SQL Injection 방지 (Django ORM 사용)
+- 비밀번호 해싱 (PBKDF2)
+- 폼 유효성 검사
+- 로그인 필요 페이지 접근 제어
+
 ## 라이선스
 
 이 프로젝트는 교육 목적으로 제작되었습니다.
