@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ medicine.drug_name }} - 의약품 정보 관리 시스템{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+    <a href="javascript:history.back()" class="btn btn-secondary">
+        &laquo; 돌아가기
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">{{ medicine.drug_name }}</h3>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">약품명</dt>
+            <dd class="col-sm-9">{{ medicine.drug_name }}</dd>
+            
+            <dt class="col-sm-3">성분명</dt>
+            <dd class="col-sm-9">{{ medicine.ingredient }}</dd>
+            
+            <dt class="col-sm-3">회사명</dt>
+            <dd class="col-sm-9">{{ medicine.company }}</dd>
+            
+            <dt class="col-sm-3">용량</dt>
+            <dd class="col-sm-9">{{ medicine.dosage }}</dd>
+            
+            <dt class="col-sm-3">등록일</dt>
+            <dd class="col-sm-9">{{ medicine.created_at|date:"Y년 m월 d일" }}</dd>
+        </dl>
+        
+        <hr>
+        
+        <h5 class="mt-4 mb-3">효능</h5>
+        <div class="card bg-light">
+            <div class="card-body">
+                <p style="white-space: pre-wrap;">{{ medicine.efficacy }}</p>
+            </div>
+        </div>
+        
+        <h5 class="mt-4 mb-3">주의사항</h5>
+        <div class="card bg-light">
+            <div class="card-body">
+                <p style="white-space: pre-wrap;">{{ medicine.precautions }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
