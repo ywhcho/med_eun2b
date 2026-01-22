@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}성분별 검색 - 의약품 정보 관리 시스템{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">성분별 의약품 검색</h2>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">성분 목록</h5>
+            </div>
+            <div class="card-body" style="max-height: 600px; overflow-y: auto;">
+                <div class="list-group">
+                    {% for ingredient in ingredients %}
+                        <a href="?ingredient={{ ingredient }}" 
+                           class="list-group-item list-group-item-action {% if ingredient == selected_ingredient %}active{% endif %}">
+                            {{ ingredient }}
+                        </a>
+                    {% empty %}
+                        <p class="text-muted">등록된 성분이 없습니다.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-9">
+        {% if medicines %}
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">검색 결과: {{ selected_ingredient }}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        {% for medicine in medicines %}
+                            <a href="{% url 'medicine:detail' medicine.pk %}" 
+                               class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">{{ medicine.drug_name }}</h6>
+                                    <small class="text-muted">{{ medicine.company }}</small>
+                                </div>
+                                <p class="mb-1 text-muted small">{{ medicine.efficacy|truncatewords:20 }}</p>
+                            </a>
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- Pagination -->
+                    {% if medicines.has_other_pages %}
+                    <nav aria-label="Page navigation" class="mt-4">
+                        <ul class="pagination">
+                            {% if medicines.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?ingredient={{ selected_ingredient }}&page={{ medicines.previous_page_number }}">이전</a>
+                                </li>
+                            {% endif %}
+                            
+                            <li class="page-item active">
+                                <span class="page-link">{{ medicines.number }} / {{ medicines.paginator.num_pages }}</span>
+                            </li>
+                            
+                            {% if medicines.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?ingredient={{ selected_ingredient }}&page={{ medicines.next_page_number }}">다음</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <p class="mb-0">좌측 성분 목록에서 성분을 선택하세요.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
